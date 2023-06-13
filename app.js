@@ -1,10 +1,17 @@
+//app.js
 const express = require('express');
 const app = express();
-
 const server = require('http').Server(app);
 
-const exphbs = require('express-handlebars');
-app.engine('handlebars', exphbs());
+const exphbs  = require('express-handlebars');
+
+//Socket.io
+const io = require('socket.io')(server);
+io.on("connection", (socket) => {
+  console.log("🔌 New user connected! 🔌");
+})
+
+app.engine('handlebars', exphbs.engine({ extname: '.handlebars', defaultLayout: "index"}));
 app.set('view engine', 'handlebars');
 
 app.get('/', (req, res) => {
@@ -12,5 +19,5 @@ app.get('/', (req, res) => {
 })
 
 server.listen('3000', () => {
-  console.log('Server listening on port 3000')
+  console.log('Server listening on Port 3000');
 })
