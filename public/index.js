@@ -6,6 +6,11 @@ $(document).ready(()=>{
   let currentUser;
   socket.emit('get online users');
 
+  $(document).on('click', '.channel', (e)=>{
+    let newChannel = e.target.textContent;
+    socket.emit('user changed channel', newChannel);
+  });
+
   $('#create-user-btn').click((e)=>{
     e.preventDefault();
     if($('#username-input').val().length > 0){
@@ -49,18 +54,18 @@ $(document).ready(()=>{
   })
 
     //Output the new message
-    socket.on('new message', (data) => {
-      //Only append the message if the user is currently in that channel
-      let currentChannel = $('.channel-current').text();
-      if(currentChannel == data.channel) {
-        $('.message-container').append(`
-          <div class="message">
-            <p class="message-user">${data.sender}: </p>
-            <p class="message-text">${data.message}</p>
-          </div>
-        `);
-      }
-    });
+  socket.on('new message', (data) => {
+    //Only append the message if the user is currently in that channel
+    let currentChannel = $('.channel-current').text();
+    if(currentChannel == data.channel) {
+      $('.message-container').append(`
+        <div class="message">
+          <p class="message-user">${data.sender}: </p>
+          <p class="message-text">${data.message}</p>
+        </div>
+      `);
+    }
+  });
 
   socket.on('get online users', (onlineUsers) => {
     for(username in onlineUsers){
