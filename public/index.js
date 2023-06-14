@@ -5,6 +5,8 @@ $(document).ready(()=>{
   //Keep track of the current user
   let currentUser;
   socket.emit('get online users');
+  let channels;
+  socket.emit('get channels');
 
   $(document).on('click', '.channel', (e)=>{
     let newChannel = e.target.textContent;
@@ -70,6 +72,12 @@ $(document).ready(()=>{
   socket.on('get online users', (onlineUsers) => {
     for(username in onlineUsers){
       $('.users-online').append(`<div class="user-online">${username}</div>`);
+    }
+  })
+
+  socket.on('get channels', (channels) => {
+    for(channel in channels){
+      $('.channels').append(`<div class="channel">${channel}</div>`);
     }
   })
 
